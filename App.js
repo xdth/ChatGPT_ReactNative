@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { ImageBackground, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { MaterialIcons } from "@expo/vector-icons";
 import { GiftedChat } from 'react-native-gifted-chat';
+import * as Speech from 'expo-speech';
 
 export default function App() {
 
@@ -48,6 +49,7 @@ export default function App() {
     .then((data) => {
       // console.log(data);
       console.log(data.choices[0].message.content);
+      setInputMessage("");
       setOutputMessage(data.choices[0].message.content.trim());
       const message = {
         _id: Math.random().toString(36).substring(7),
@@ -59,6 +61,9 @@ export default function App() {
       setMessages((previousMessages) =>
         GiftedChat.append(previousMessages, [message])
       );
+
+      options={};
+      Speech.speak(data.choices[0].message.content, options)
   
     });
     console.log(inputMessage);
@@ -94,6 +99,7 @@ export default function App() {
     .then((data) => {
       console.log(data);
       console.log(data.data[0].url);
+      setInputMessage("");
       setOutputMessage(data.data[0].url);
 
       data.data.forEach(item => {
@@ -119,51 +125,57 @@ export default function App() {
   }
 
   return (
-    <View style={{flex: 1}}>
-      <View style={{flex: 1, justifyContent: "center"}}>
-        {/* <Text>{outputMessage}</Text> */}
-        <GiftedChat
-          messages={messages}
-          renderInputToolbar={() => {}}
-          user={{_id: 1}}
-          minInputToolbarHeight={0}
-        />
-      </View>
-      <View style={{flexDirection: "row"}}>
-        <View style={{
-          flex: 1, 
-          marginLeft: 10,
-          marginBottom: 20,
-          backgroundColor: "white",
-          borderRadius: 10,
-          borderColor: "gray",
-          borderWidth: 1,
-          height: 60,
-          marginLeft: 10,
-          marginRight: 10,
-          justifyContent: "center",
-          paddingLeft: 10,
-          paddingRight: 10,
-        }}>
-          <TextInput placeholder='Enter your question' onChangeText={handleTextInput} />
+    <ImageBackground
+      source={require('./assets/bg2.jpg')}
+      resizeMode='cover'
+      style={{flex: 1, width:"100%", height: "100%"}}
+    >
+      <View style={{flex: 1}}>
+        <View style={{flex: 1, justifyContent: "center"}}>
+          {/* <Text>{outputMessage}</Text> */}
+          <GiftedChat
+            messages={messages}
+            renderInputToolbar={() => {}}
+            user={{_id: 1}}
+            minInputToolbarHeight={0}
+          />
         </View>
-        <TouchableOpacity onPress={handleButtonClick}>
+        <View style={{flexDirection: "row"}}>
           <View style={{
-            backgroundColor: "green",
-            padding: 5,
-            marginRight: 10,
+            flex: 1, 
+            marginLeft: 10,
             marginBottom: 20,
-            borderRadius: 9999,
-            width: 60,
+            backgroundColor: "white",
+            borderRadius: 10,
+            borderColor: "gray",
+            borderWidth: 1,
             height: 60,
+            marginLeft: 10,
+            marginRight: 10,
             justifyContent: "center",
+            paddingLeft: 10,
+            paddingRight: 10,
           }}>
-            <MaterialIcons name="send" size={30} color="white" style={{marginLeft: 10}} />
+            <TextInput placeholder='Enter your question' onChangeText={handleTextInput} value={inputMessage} />
           </View>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={handleButtonClick}>
+            <View style={{
+              backgroundColor: "green",
+              padding: 5,
+              marginRight: 10,
+              marginBottom: 20,
+              borderRadius: 9999,
+              width: 60,
+              height: 60,
+              justifyContent: "center",
+            }}>
+              <MaterialIcons name="send" size={30} color="white" style={{marginLeft: 10}} />
+            </View>
+          </TouchableOpacity>
+        </View>
+        <StatusBar style="auto" />
       </View>
-      <StatusBar style="auto" />
-    </View>
+    </ImageBackground>
   );
 }
 
