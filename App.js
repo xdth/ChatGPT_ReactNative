@@ -5,13 +5,14 @@ import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-nativ
 export default function App() {
 
   const [inputMessage, setInputMessage] = useState("");
+  const [outputMessage, setOutputMessage] = useState("Results will be shown here:");
   
   const handleButtonClick=()=>{
     fetch("https://api.openai.com/v1/completions", {
       method:"POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer $apikey"
+        "Authorization": "Bearer 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"
       },
 
       // "model": "text-davinci-003",
@@ -26,7 +27,8 @@ export default function App() {
     })
     .then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      console.log(data.choices[0].text);
+      setOutputMessage(data.choices[0].text.trim());
     });
     console.log(inputMessage);
   }
@@ -39,7 +41,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={{flex: 1, justifyContent: "center"}}>
-        <Text>Results:</Text>
+        <Text>{outputMessage}</Text>
       </View>
       <View style={{flexDirection: "row"}}>
         <View style={{flex: 1, marginLeft: 10}}>
