@@ -12,7 +12,7 @@ export default function App() {
       method:"POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer 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"
+        "Authorization": "Bearer xxx"
       },
 
       // "model": "text-davinci-003",
